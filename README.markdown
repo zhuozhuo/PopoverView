@@ -2,12 +2,11 @@
 
 PopoverView is a simple resolution-independent UIView written entirely in CoreGraphics and QuartzCore for display of modal content on both iPhone and iPad.  It can display singular UIView contentViews, arrays of `UIViews`, display titles, or even allow selection from a list of strings.  It is implemented via a very simple static interface that allows you to show the popover with just a single line.  All animation, positioning, and memory allocations are handled by the component at runtime.  We are releasing under the MIT License.
 
-For More Information, please see our full blog post:
-[PopoverView](http://www.getosito.com/blog/engineering/popoverview-a-flexible-modal-content-view-for-ios/)
+
 
 ***
 
-<img src="http://www.getosito.com/img/postImages/popoverMap.png" width="320" height="480" />
+![gif](https://github.com/zhuozhuo/PopoverView/blob/master/ScreenShot/Popview.gif)
 
 ***
 
@@ -24,7 +23,7 @@ OCDaysView *daysView = [[OCDaysView alloc] initWithFrame:CGRectMake(0, 0, 150, 1
 
 As you may note, I have two versions of the display code here.  One of them displays the `daysView` as a single `contentView` with no title, and the other displays the same view with a "October 2012" title.
 
-<img src="http://www.getosito.com/img/postImages/popoverCal1.png" width="320" height="480" />
+<img src="https://github.com/zhuozhuo/PopoverView/blob/master/ScreenShot/screenshot1.png" width="375" height="667" />
 
 ***
 

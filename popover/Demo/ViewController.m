@@ -64,17 +64,17 @@
 //                         withStringArray:kStringArray
 //                                delegate:self]; // Show the string array defined at top of this file
     
-    pv = [PopoverView showPopoverAtPoint:point
-                                  inView:self.view
-                               withTitle:@"Was this helpful?"
-                         withStringArray:kStringArray
-                                delegate:self]; // Show string array defined at top of this file with title.
-
 //    pv = [PopoverView showPopoverAtPoint:point
 //                                  inView:self.view
+//                               withTitle:@"Was this helpful?"
 //                         withStringArray:kStringArray
-//                          withImageArray:kImageArray
-//                                delegate:self];
+//                                delegate:self]; // Show string array defined at top of this file with title.
+
+    pv = [PopoverView showPopoverAtPoint:point
+                                  inView:self.view
+                         withStringArray:kStringArray
+                          withImageArray:kImageArray
+                                delegate:self];
 
 //    pv = [PopoverView showPopoverAtPoint:point
 //                                  inView:self.view
@@ -138,7 +138,7 @@
 
 - (void)popoverView:(PopoverView *)popoverView didSelectItemAtIndex:(NSInteger)index
 {
-    NSLog(@"%s item:%d", __PRETTY_FUNCTION__, index);
+    NSLog(@"%s item:%ld", __PRETTY_FUNCTION__, (long)index);
     
     // Figure out which string was selected, store in "string"
     NSString *string = [kStringArray objectAtIndex:index];

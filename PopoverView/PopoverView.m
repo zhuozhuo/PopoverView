@@ -19,8 +19,8 @@
 @synthesize titleView;
 @synthesize delegate;
 
-#pragma mark - Static Methods
 
+#pragma mark - Static Methods
 + (PopoverView *)showPopoverAtPoint:(CGPoint)point inView:(UIView *)view withText:(NSString *)text delegate:(id<PopoverViewDelegate>)delegate {
     PopoverView *popoverView = [[PopoverView alloc] initWithFrame:CGRectZero];
     [popoverView showAtPoint:point inView:view withText:text];
@@ -28,6 +28,7 @@
     [popoverView RELEASE];
     return popoverView;
 }
+
 
 + (PopoverView *)showPopoverAtPoint:(CGPoint)point inView:(UIView *)view withTitle:(NSString *)title withText:(NSString *)text delegate:(id<PopoverViewDelegate>)delegate {
     PopoverView *popoverView = [[PopoverView alloc] initWithFrame:CGRectZero];
@@ -85,6 +86,7 @@
     return popoverView;
 }
 
+
 + (PopoverView *)showPopoverAtPoint:(CGPoint)point inView:(UIView *)view withTitle:(NSString *)title withContentView:(UIView *)cView delegate:(id<PopoverViewDelegate>)delegate {
     PopoverView *popoverView = [[PopoverView alloc] initWithFrame:CGRectZero];
     [popoverView showAtPoint:point inView:view withTitle:title withContentView:cView];
@@ -93,6 +95,7 @@
     return popoverView;
 }
 
+
 + (PopoverView *)showPopoverAtPoint:(CGPoint)point inView:(UIView *)view withContentView:(UIView *)cView delegate:(id<PopoverViewDelegate>)delegate {
     PopoverView *popoverView = [[PopoverView alloc] initWithFrame:CGRectZero];
     [popoverView showAtPoint:point inView:view withContentView:cView];
@@ -100,6 +103,7 @@
     [popoverView RELEASE];
     return popoverView;
 }
+
 
 #pragma mark - View Lifecycle
 
@@ -161,7 +165,10 @@
     UIFont *font = kTextFont;
     
     CGSize screenSize = [self screenSize];
-    CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
+    
+    //CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
+     CGRect stringRect = [text boundingRectWithSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : font} context:nil];
+     CGSize textSize = stringRect.size;
     
     UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
     textView.backgroundColor = [UIColor clearColor];
@@ -180,7 +187,9 @@
     UIFont *font = kTextFont;
     
     CGSize screenSize = [self screenSize];
-    CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
+    //CGSize textSize = [text sizeWithFont:font constrainedToSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, 1000.f) lineBreakMode:UILineBreakModeWordWrap];
+    CGRect stringRect = [text boundingRectWithSize:CGSizeMake(screenSize.width - kHorizontalMargin*4.f, CGFLOAT_MAX) options:(NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin) attributes:@{ NSFontAttributeName : font} context:nil];
+    CGSize textSize = stringRect.size;
     
     UILabel *textView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
     textView.backgroundColor = [UIColor clearColor];
@@ -269,7 +278,8 @@
     UIView *container = [[UIView alloc] initWithFrame:CGRectZero];
     
     //Create a label for the title text.
-    CGSize titleSize = [title sizeWithFont:kTitleFont];
+    //CGSize titleSize = [title sizeWithFont:kTitleFont];
+    CGSize titleSize = [title sizeWithAttributes:@{ NSFontAttributeName :kTitleFont }];
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, titleSize.width, titleSize.height)];
     titleLabel.backgroundColor = [UIColor clearColor];
     titleLabel.font = kTitleFont;
@@ -356,7 +366,8 @@
     UIFont *font = kTextFont;
     
     for (NSString *string in stringArray) {
-        CGSize textSize = [string sizeWithFont:font];
+       // CGSize textSize = [string sizeWithFont:font];
+        CGSize textSize = [string sizeWithAttributes:@{ NSFontAttributeName :font }];
         UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         textButton.backgroundColor = [UIColor clearColor];
         textButton.titleLabel.font = font;
@@ -381,7 +392,9 @@
     UIFont *font = kTextFont;
     
     for (NSString *string in stringArray) {
-        CGSize textSize = [string sizeWithFont:font];
+       // CGSize textSize = [string sizeWithFont:font];
+         CGSize textSize = [string sizeWithAttributes:@{ NSFontAttributeName :font}];
+        
         UIButton *textButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         textButton.backgroundColor = [UIColor clearColor];
         textButton.titleLabel.font = font;
@@ -423,12 +436,14 @@
     NSMutableArray *tempViewArray = [[NSMutableArray alloc] initWithCapacity:stringArray.count];
     
     UIFont *font = kTextFont;
+    CGFloat spaceX = 10.0f,beginX = 3.0;
     
     for (int i = 0; i < stringArray.count; i++) {
         NSString *string = [stringArray objectAtIndex:i];
         
         //First we build a label for the text to set in.
-        CGSize textSize = [string sizeWithFont:font];
+        //CGSize textSize = [string sizeWithFont:font];
+        CGSize textSize = [string sizeWithAttributes:@{ NSFontAttributeName :font }];
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, textSize.width, textSize.height)];
         label.backgroundColor = [UIColor clearColor];
         label.font = font;
@@ -443,15 +458,15 @@
         UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
         
         //Take the larger of the two widths as the width for the container
-        float containerWidth = MAX(imageView.frame.size.width, label.frame.size.width);
-        float containerHeight = label.frame.size.height + kImageTopPadding + kImageBottomPadding + imageView.frame.size.height;
+        float containerWidth = imageView.frame.size.width + label.frame.size.width + spaceX + beginX*2;
+        float containerHeight = MAX(label.frame.size.height, image.size.height);
         
         //This container will hold both the image and the label
         UIView *containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, containerWidth, containerHeight)];
         
         //Now we do the frame manipulations to put the imageView on top of the label, both centered
-        imageView.frame = CGRectMake(floorf(containerWidth*0.5f - imageView.frame.size.width*0.5f), kImageTopPadding, imageView.frame.size.width, imageView.frame.size.height);
-        label.frame = CGRectMake(floorf(containerWidth*0.5f - label.frame.size.width*0.5f), imageView.frame.size.height + kImageBottomPadding + kImageTopPadding, label.frame.size.width, label.frame.size.height);
+        imageView.frame = CGRectMake(beginX, (containerHeight-image.size.height)/2, imageView.frame.size.width, imageView.frame.size.height);
+        label.frame = CGRectMake(beginX + image.size.width + spaceX, (containerHeight - textSize.height)/2, label.frame.size.width, label.frame.size.height);
         
         [containerView addSubview:imageView];
         [containerView addSubview:label];
@@ -477,11 +492,9 @@
     
     self.contentView = cView;
     parentView = view;
-    
     // get the top view
     // http://stackoverflow.com/questions/3843411/getting-reference-to-the-top-most-view-window-in-ios-application/8045804#8045804
     topView = [[[[UIApplication sharedApplication] keyWindow] subviews] lastObject];
-    
     [self setupLayout:point inView:view];
     
     // Make the view small and transparent before animation
@@ -833,11 +846,11 @@
 
 - (void)dismissComplete
 {
-    [self removeFromSuperview];
-    
     if (self.delegate && [self.delegate respondsToSelector:@selector(popoverViewDidDismiss:)]) {
         [delegate popoverViewDidDismiss:self];
     }
+
+    [self removeFromSuperview];
 }
 
 - (void)animateRotationToNewPoint:(CGPoint)point inView:(UIView *)view withDuration:(NSTimeInterval)duration
